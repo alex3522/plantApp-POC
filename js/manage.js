@@ -69,10 +69,6 @@ function renderCard(up, plant) {
           <span class="manage-field-label">Room</span>
           ${fieldSpan('room', up.id, up.room, 'e.g. Living room')}
         </div>
-        <div class="manage-field-row">
-          <span class="manage-field-label">Sun exposure</span>
-          ${fieldSpan('sun_exposure', up.id, up.sun_exposure, 'e.g. Bright indirect')}
-        </div>
       </div>
     </div>`
 }

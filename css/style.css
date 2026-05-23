@@ -1220,3 +1220,120 @@ nav a:hover { color: #1a1a1a; }
   color: #2d6a4f;
   padding: 0.4rem 0;
 }
+
+/* PLANT PROFILE */
+.profile-card {
+  background: #fff;
+  border: 1px solid #ebebeb;
+  border-radius: 12px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+  max-width: 720px;
+}
+
+.profile-row {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  padding: 0.6rem 0;
+}
+
+.profile-row + .profile-row {
+  border-top: 1px solid #f0f0ee;
+}
+
+.profile-label {
+  font-size: 0.75rem;
+  color: #999;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  min-width: 120px;
+  flex-shrink: 0;
+}
+
+.profile-value-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.location-display {
+  font-size: 0.85rem;
+  color: #555;
+  min-height: 1.2em;
+}
+
+.location-btn {
+  margin-top: 0.35rem;
+  padding: 0.4rem 0.85rem;
+  background: #f0faf4;
+  color: #2d6a4f;
+  border: 1px solid #c3e6d5;
+  border-radius: 7px;
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+
+.location-btn:hover:not(:disabled) { background: #d4f0e2; }
+.location-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.sun-display { font-size: 0.85rem; color: #555; }
+
+.view-val { font-size: 0.85rem; color: #1a1a1a; }
+.view-val:empty::before { content: '—'; color: #bbb; }
+
+.profile-card .edit-input { display: none; }
+.profile-card.editing .edit-input { display: block; }
+.profile-card.editing .view-val { display: none; }
+
+.profile-edit-btn {
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #2d6a4f;
+  background: none;
+  border: 1px solid #c3e6d5;
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.profile-edit-btn:hover { background: #f0faf4; }
+
+.profile-month-input {
+  font-family: inherit;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  outline: none;
+  cursor: pointer;
+  width: fit-content;
+}
+
+.profile-month-input:focus { border-color: #2d6a4f; }
+.profile-month-input.just-saved { background: #dcfce7; }
+
+.profile-select {
+  font-family: inherit;
+  font-size: 0.85rem;
+  color: #1a1a1a;
+  background: #fff;
+  border: 1px solid #e0e0e0;
+  border-radius: 7px;
+  padding: 0.35rem 0.6rem;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.profile-select:focus { border-color: #2d6a4f; }
+
+.profile-select.just-saved { background: #dcfce7; }
