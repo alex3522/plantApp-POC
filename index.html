@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>plantApp</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">plant<span>App</span></a>
+    <div class="nav-right">
+      <a href="#" id="sign-in-link">Sign in</a>
+      <div class="user-menu" id="user-menu" style="display:none">
+        <span class="user-email" id="user-email"></span>
+        <a href="#" id="sign-out-btn">Sign out</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="hero">
+    <h1>Your plants, looked after.</h1>
+    <p>Search for a plant to get care guides, watering schedules, and feeding tips.</p>
+    <div class="search-wrapper">
+      <div class="search-bar">
+        <input type="text" placeholder="Search plants e.g. Monstera, Peace Lily…" autocomplete="off" />
+        <button>Search</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="content">
+
+    <!-- SIGNED IN ONLY -->
+    <div id="signed-in-content" style="display:none">
+
+      <div class="section-header">
+        <h2>Upcoming care</h2>
+        <a href="schedule.html">View all</a>
+      </div>
+      <div class="tasks-list" id="tasks-list"></div>
+
+      <div class="section-header">
+        <h2>My plants</h2>
+        <a href="manage.html">Manage</a>
+      </div>
+      <div class="plants-grid" id="plants-grid"></div>
+
+    </div>
+
+    <!-- POPULAR PLANTS -->
+    <div class="section-header">
+      <h2>Popular plants</h2>
+      <a href="browse.html">Browse all</a>
+    </div>
+    <div class="popular-grid">
+      <a href="plant.html?id=monstera" class="popular-card"><div class="icon">🌿</div><div class="name">Monstera</div></a>
+      <a href="plant.html?id=cactus" class="popular-card"><div class="icon">🌵</div><div class="name">Cactus</div></a>
+      <a href="plant.html?id=peace-lily" class="popular-card"><div class="icon">🌸</div><div class="name">Peace Lily</div></a>
+      <a href="plant.html?id=pothos" class="popular-card"><div class="icon">🪴</div><div class="name">Pothos</div></a>
+      <a href="plant.html?id=parlour-palm" class="popular-card"><div class="icon">🌴</div><div class="name">Parlour Palm</div></a>
+      <a href="plant.html?id=aloe-vera" class="popular-card"><div class="icon">🌱</div><div class="name">Aloe Vera</div></a>
+    </div>
+
+  </div>
+
+  <script src="js/search.js"></script>
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>

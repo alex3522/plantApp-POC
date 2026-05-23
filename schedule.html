@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Care Schedule — plantApp</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <nav>
+    <a href="index.html" class="logo">plant<span>App</span></a>
+    <div class="nav-right">
+      <a href="#" id="sign-in-link">Sign in</a>
+      <div class="user-menu" id="user-menu" style="display:none">
+        <span class="user-email" id="user-email"></span>
+        <a href="#" id="sign-out-btn">Sign out</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="content">
+
+    <a href="index.html" class="back-link">← Back to my plants</a>
+
+    <div class="calendar-nav">
+      <button class="cal-nav-btn" id="prev-month">←</button>
+      <h2 id="month-label"></h2>
+      <button class="cal-nav-btn" id="next-month">→</button>
+    </div>
+
+    <div class="calendar-grid" id="calendar-grid"></div>
+
+  </div>
+
+  <script type="module" src="js/schedule.js"></script>
+
+</body>
+</html>

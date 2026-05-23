@@ -1,0 +1,332 @@
+{
+  "plants": [
+    {
+      "id": "monstera",
+      "name": "Monstera",
+      "species": "Monstera deliciosa",
+      "icon": "🌿",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "Allow soil to dry out between waterings",
+          "amount": "Water thoroughly until it drains freely",
+          "seasonal": "Reduce in winter",
+          "seasonalNote": "Growth slows, so the soil stays wet longer"
+        },
+        "feeding": {
+          "frequency": "Once a month",
+          "frequencyNote": "Spring through summer only",
+          "fertiliser": "Balanced liquid feed (e.g. 20-20-20)",
+          "winter": "Do not feed",
+          "winterNote": "Plant is dormant and won't use nutrients"
+        },
+        "light": {
+          "ideal": "Bright, indirect light",
+          "placement": "Near a north or east-facing window",
+          "placementNote": "A few feet back from a south-facing window also works",
+          "avoid": "Direct afternoon sun",
+          "avoidNote": "Will scorch the leaves"
+        },
+        "environment": {
+          "temperature": "18–27°C (65–80°F)",
+          "temperatureNote": "Keep away from cold draughts and radiators",
+          "humidity": "Moderate to high (40–60%)",
+          "humidityNote": "Mist leaves or use a pebble tray to boost humidity"
+        }
+      },
+      "tips": [
+        "Wipe leaves with a damp cloth occasionally to remove dust and help the plant absorb light",
+        "Repot every 1–2 years in spring when roots start coming through the drainage holes",
+        "The aerial roots can be tucked into the soil or trained up a moss pole for support",
+        "Yellow leaves usually mean overwatering — check the soil before watering again"
+      ]
+    },
+    {
+      "id": "snake-plant",
+      "name": "Snake Plant",
+      "species": "Dracaena trifasciata",
+      "icon": "🪴",
+      "care": {
+        "watering": {
+          "frequency": "Every 2–6 weeks",
+          "frequencyNote": "One of the most drought-tolerant houseplants",
+          "amount": "Water moderately, letting the soil dry out completely first",
+          "seasonal": "Reduce to once a month or less in winter",
+          "seasonalNote": "Overwatering in cold months is the most common cause of death"
+        },
+        "feeding": {
+          "frequency": "Every 2 months",
+          "frequencyNote": "Spring and summer only",
+          "fertiliser": "General-purpose liquid fertiliser at half strength",
+          "winter": "Do not feed",
+          "winterNote": "Plant is near dormant in low light and cold"
+        },
+        "light": {
+          "ideal": "Low to bright indirect light",
+          "placement": "Tolerates most spots in the home",
+          "placementNote": "Will grow faster in brighter light but survives in dim corners",
+          "avoid": "Prolonged direct sun",
+          "avoidNote": "Can bleach or scorch the leaves"
+        },
+        "environment": {
+          "temperature": "15–29°C (60–85°F)",
+          "temperatureNote": "Avoid temperatures below 10°C — cold drafts will damage it",
+          "humidity": "Low to average (30–50%)",
+          "humidityNote": "Does not need extra humidity — very adaptable"
+        }
+      },
+      "tips": [
+        "One of the best plants for beginners — very hard to kill",
+        "Always err on the side of underwatering rather than overwatering",
+        "Wipe dust from the leaves occasionally to keep them looking their best",
+        "Can be propagated easily by dividing at the root or taking leaf cuttings"
+      ]
+    },
+    {
+      "id": "fiddle-leaf-fig",
+      "name": "Fiddle Leaf Fig",
+      "species": "Ficus lyrata",
+      "icon": "🌱",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "Water when the top 5cm of soil is dry",
+          "amount": "Water thoroughly, then allow to drain completely",
+          "seasonal": "Reduce slightly in winter",
+          "seasonalNote": "Less active growth means less water needed"
+        },
+        "feeding": {
+          "frequency": "Once a month",
+          "frequencyNote": "March through September",
+          "fertiliser": "High-nitrogen liquid fertiliser",
+          "winter": "Do not feed",
+          "winterNote": "Growth stops and excess nutrients can damage roots"
+        },
+        "light": {
+          "ideal": "Bright, indirect light",
+          "placement": "Close to a south or west-facing window",
+          "placementNote": "Needs more light than most houseplants to thrive",
+          "avoid": "Low light and direct midday sun",
+          "avoidNote": "Low light causes leggy growth; direct sun scorches leaves"
+        },
+        "environment": {
+          "temperature": "16–24°C (60–75°F)",
+          "temperatureNote": "Hates cold drafts and sudden temperature changes — do not move it often",
+          "humidity": "Moderate to high (30–65%)",
+          "humidityNote": "Mist regularly or use a humidifier in dry rooms"
+        }
+      },
+      "tips": [
+        "Consistency is key — it hates being moved and will drop leaves in protest",
+        "Rotate the pot a quarter turn each month for even, upright growth",
+        "Brown spots on leaves usually indicate root rot from overwatering",
+        "Dust the large leaves regularly so they can photosynthesize efficiently"
+      ]
+    },
+    {
+      "id": "cactus",
+      "name": "Cactus",
+      "species": "Cactaceae family",
+      "icon": "🌵",
+      "care": {
+        "watering": {
+          "frequency": "Every 2–4 weeks in summer",
+          "frequencyNote": "Allow soil to dry out completely between waterings",
+          "amount": "Water deeply but infrequently",
+          "seasonal": "Once a month or less in winter",
+          "seasonalNote": "Most cacti are dormant in winter and need very little water"
+        },
+        "feeding": {
+          "frequency": "Every 4–6 weeks",
+          "frequencyNote": "During the growing season only (spring and summer)",
+          "fertiliser": "Low-nitrogen cactus fertiliser",
+          "winter": "Do not feed",
+          "winterNote": "Dormant period — feeding can cause weak, leggy growth"
+        },
+        "light": {
+          "ideal": "Full sun or very bright indirect light",
+          "placement": "South-facing windowsill",
+          "placementNote": "The more direct sun the better for most species",
+          "avoid": "Dark or low-light positions",
+          "avoidNote": "Will become etiolated (stretched and pale) without enough light"
+        },
+        "environment": {
+          "temperature": "18–30°C (65–86°F) in summer",
+          "temperatureNote": "Many species tolerate cold winters down to 5–10°C if kept dry",
+          "humidity": "Low (20–40%)",
+          "humidityNote": "Thrives in dry air — avoid humid bathrooms or kitchens"
+        }
+      },
+      "tips": [
+        "Use a gritty, free-draining cactus compost to prevent root rot",
+        "Terracotta pots are ideal as they allow moisture to evaporate through the sides",
+        "Handle with thick gloves or folded newspaper to avoid spines",
+        "A cool, dry winter rest period often encourages flowering in spring"
+      ]
+    },
+    {
+      "id": "peace-lily",
+      "name": "Peace Lily",
+      "species": "Spathiphyllum wallisii",
+      "icon": "🌸",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "It will visibly droop when thirsty — a reliable signal",
+          "amount": "Water thoroughly until it drains from the bottom",
+          "seasonal": "Reduce slightly in winter",
+          "seasonalNote": "Less light means slower water uptake"
+        },
+        "feeding": {
+          "frequency": "Every 6 weeks",
+          "frequencyNote": "Spring and summer",
+          "fertiliser": "Balanced liquid houseplant feed",
+          "winter": "Do not feed",
+          "winterNote": "Plant is resting and doesn't need extra nutrients"
+        },
+        "light": {
+          "ideal": "Low to medium indirect light",
+          "placement": "Away from windows or in a shaded spot",
+          "placementNote": "One of the few flowering plants that thrives in low light",
+          "avoid": "Direct sunlight",
+          "avoidNote": "Will scorch and yellow the leaves quickly"
+        },
+        "environment": {
+          "temperature": "18–30°C (65–86°F)",
+          "temperatureNote": "Avoid anything below 13°C and cold window drafts",
+          "humidity": "High (50–70%)",
+          "humidityNote": "Mist frequently or keep near a humidifier — loves moisture"
+        }
+      },
+      "tips": [
+        "Toxic to cats and dogs — keep out of reach of pets",
+        "Yellow leaves usually mean too much direct light or overwatering",
+        "Flowers best when slightly root-bound, so don't rush to repot",
+        "Wipe the broad leaves occasionally to keep them dust-free"
+      ]
+    },
+    {
+      "id": "pothos",
+      "name": "Pothos",
+      "species": "Epipremnum aureum",
+      "icon": "🪴",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "Allow the top half of the soil to dry out between waterings",
+          "amount": "Water thoroughly, then let it drain",
+          "seasonal": "Reduce in winter",
+          "seasonalNote": "Slower growth means slower water uptake"
+        },
+        "feeding": {
+          "frequency": "Every 2–3 months",
+          "frequencyNote": "Spring through summer",
+          "fertiliser": "Balanced liquid houseplant fertiliser",
+          "winter": "Do not feed",
+          "winterNote": "Growth slows significantly in low winter light"
+        },
+        "light": {
+          "ideal": "Low to bright indirect light",
+          "placement": "Almost anywhere in the home",
+          "placementNote": "Variegated varieties need more light to keep their pattern",
+          "avoid": "Direct sun",
+          "avoidNote": "Will scorch the leaves"
+        },
+        "environment": {
+          "temperature": "15–29°C (59–85°F)",
+          "temperatureNote": "Avoid cold drafts and temperatures below 10°C",
+          "humidity": "Average (40–60%)",
+          "humidityNote": "Tolerates normal household humidity well"
+        }
+      },
+      "tips": [
+        "One of the easiest houseplants to propagate — just snip a node and place in water",
+        "Train trailing vines up a moss pole or let them cascade from a shelf",
+        "Toxic to pets — keep away from cats and dogs",
+        "Yellowing leaves are usually a sign of overwatering"
+      ]
+    },
+    {
+      "id": "parlour-palm",
+      "name": "Parlour Palm",
+      "species": "Chamaedorea elegans",
+      "icon": "🌴",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "Keep soil lightly moist — not soggy, not bone dry",
+          "amount": "Water moderately and allow the top inch to dry before watering again",
+          "seasonal": "Reduce in winter",
+          "seasonalNote": "Less light and cooler temps slow growth and water needs"
+        },
+        "feeding": {
+          "frequency": "Every 2 months",
+          "frequencyNote": "Spring through summer only",
+          "fertiliser": "Liquid palm fertiliser or general houseplant feed",
+          "winter": "Do not feed",
+          "winterNote": "Dormant — feeding can cause salt build-up in the soil"
+        },
+        "light": {
+          "ideal": "Low to medium indirect light",
+          "placement": "Away from direct sun, near a bright room",
+          "placementNote": "Does well in north-facing rooms",
+          "avoid": "Direct sunlight",
+          "avoidNote": "Fronds will scorch and turn yellow"
+        },
+        "environment": {
+          "temperature": "18–27°C (65–80°F)",
+          "temperatureNote": "Avoid cold drafts — keep away from exterior doors in winter",
+          "humidity": "Moderate to high (40–60%)",
+          "humidityNote": "Mist occasionally or group with other plants to raise humidity"
+        }
+      },
+      "tips": [
+        "One of the most tolerant palms for indoor conditions",
+        "Brown leaf tips are usually caused by dry air or fluoride in tap water — try filtered water",
+        "Non-toxic to cats and dogs — a safe choice for pet owners",
+        "Slow growing — don't expect rapid height gains"
+      ]
+    },
+    {
+      "id": "aloe-vera",
+      "name": "Aloe Vera",
+      "species": "Aloe barbadensis miller",
+      "icon": "🌱",
+      "care": {
+        "watering": {
+          "frequency": "Every 3–4 weeks",
+          "frequencyNote": "Allow the soil to dry out completely between waterings",
+          "amount": "Water deeply, then leave until fully dry again",
+          "seasonal": "Once every 6–8 weeks in winter",
+          "seasonalNote": "Very little water needed when growth has stopped"
+        },
+        "feeding": {
+          "frequency": "Once or twice a year",
+          "frequencyNote": "Spring and early summer only",
+          "fertiliser": "Diluted succulent or cactus fertiliser",
+          "winter": "Do not feed",
+          "winterNote": "Dormant — feeding is unnecessary and can cause harm"
+        },
+        "light": {
+          "ideal": "Bright direct or indirect light",
+          "placement": "South or west-facing windowsill",
+          "placementNote": "Needs at least 6 hours of light a day to stay compact and healthy",
+          "avoid": "Deep shade",
+          "avoidNote": "Will become floppy and pale without enough light"
+        },
+        "environment": {
+          "temperature": "13–27°C (55–80°F)",
+          "temperatureNote": "Cannot tolerate frost — bring indoors if kept outside in summer",
+          "humidity": "Low (20–40%)",
+          "humidityNote": "Prefers dry air — avoid kitchens and bathrooms"
+        }
+      },
+      "tips": [
+        "Use a cactus or succulent compost mixed with perlite for best drainage",
+        "The gel inside the leaves can be applied directly to minor burns and skin irritation",
+        "Toxic if ingested by pets — keep out of reach of cats and dogs",
+        "Offsets (pups) grow at the base and can be separated to propagate new plants"
+      ]
+    }
+  ]
+}
