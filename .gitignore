@@ -12,6 +12,9 @@ keys
 care-response-*.json
 care-plan-*.json
 
+# Supabase CLI
+supabase/.temp/
+
 # Logs
 *.log
 npm-debug.log*
