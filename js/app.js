@@ -105,17 +105,47 @@ async function loadUpcomingCare(user) {
       dueLabel = `In ${days} days`
     }
 
+    const dateStr = new Date(task.next_due + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+
     return `
-      <div class="task-item" data-type="${task.care_type}">
+      <div class="task-item" data-type="${task.care_type}" data-id="${task.id}" data-frequency="${task.frequency_days}">
         <div class="task-icon">${plantIcon}</div>
         <div class="task-info">
           <div class="task-name">${name}</div>
           <div class="task-plant">${careLabel}</div>
         </div>
-        <div class="task-due${soon ? ' soon' : ''}">${dueLabel}</div>
+        <div class="task-due-wrap">
+          <div class="task-due${soon ? ' soon' : ''}">${dueLabel}</div>
+          <div class="task-date">${dateStr}</div>
+        </div>
+        <button class="task-done-btn" data-id="${task.id}" data-frequency="${task.frequency_days}" title="Mark as done">✓</button>
       </div>`
   }).join('')
 }
+
+// Mark care task as done
+document.addEventListener('click', async e => {
+  const btn = e.target.closest('.task-done-btn')
+  if (!btn) return
+
+  const { id, frequency } = btn.dataset
+  const nextDue = new Date()
+  nextDue.setDate(nextDue.getDate() + parseInt(frequency))
+  const nextDueStr = nextDue.toISOString().split('T')[0]
+
+  btn.disabled = true
+  await supabase.from('care_schedule').update({ next_due: nextDueStr }).eq('id', id)
+
+  const item = btn.closest('.task-item')
+  item.classList.add('task-done')
+  setTimeout(() => {
+    item.remove()
+    if (!document.querySelector('.task-item')) {
+      document.getElementById('tasks-list').innerHTML =
+        `<p style="font-size:0.875rem;color:#999">Nothing due — all caught up.</p>`
+    }
+  }, 400)
+})
 
 // Remove plant via event delegation
 document.addEventListener('click', async e => {
