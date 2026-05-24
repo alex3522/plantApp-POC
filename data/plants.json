@@ -327,6 +327,88 @@
         "Toxic if ingested by pets — keep out of reach of cats and dogs",
         "Offsets (pups) grow at the base and can be separated to propagate new plants"
       ]
+    },
+    {
+      "id": "strelitzia-nicolai",
+      "name": "White Bird of Paradise",
+      "species": "Strelitzia nicolai",
+      "icon": "🪴",
+      "care": {
+        "watering": {
+          "frequency": "Every 1–2 weeks",
+          "frequencyNote": "Allow the top half of soil to dry out between waterings",
+          "amount": "Water thoroughly until it drains freely",
+          "seasonal": "Reduce in winter",
+          "seasonalNote": "Growth slows significantly in low light — check soil before watering"
+        },
+        "feeding": {
+          "frequency": "Every 2–4 weeks",
+          "frequencyNote": "During active growth in spring and summer",
+          "fertiliser": "Balanced liquid fertiliser (e.g. 20-20-20)",
+          "winter": "Do not feed",
+          "winterNote": "Plant enters a rest period"
+        },
+        "light": {
+          "ideal": "Bright, direct or indirect light",
+          "placement": "South or west-facing window",
+          "placementNote": "Tolerates some direct sun — it actively encourages growth",
+          "avoid": "Deep shade",
+          "avoidNote": "Insufficient light causes slow growth and drooping leaves"
+        },
+        "environment": {
+          "temperature": "18–30°C (65–86°F)",
+          "temperatureNote": "Avoid cold draughts and temperatures below 10°C",
+          "humidity": "Moderate (40–60%)",
+          "humidityNote": "Mist occasionally or group with other plants"
+        }
+      },
+      "tips": [
+        "Split leaves are natural on large specimens — they allow wind to pass through without damaging the plant",
+        "Rotate the pot a quarter turn each month to ensure even growth toward the light",
+        "Repot every 1–2 years — this plant grows quickly and becomes root bound fast",
+        "Wipe the large leaves regularly with a damp cloth to remove dust and maximise light absorption"
+      ]
+    },
+    {
+      "id": "aspidistra",
+      "name": "Aspidistra",
+      "species": "Aspidistra elatior",
+      "icon": "🌱",
+      "care": {
+        "watering": {
+          "frequency": "Every 2–3 weeks",
+          "frequencyNote": "Allow soil to dry out almost completely between waterings",
+          "amount": "Water moderately — less than you think it needs",
+          "seasonal": "Reduce significantly in winter",
+          "seasonalNote": "Very drought-tolerant; overwatering is the main risk"
+        },
+        "feeding": {
+          "frequency": "Every 6–8 weeks",
+          "frequencyNote": "Spring and summer only",
+          "fertiliser": "Diluted balanced liquid feed at half strength",
+          "winter": "Do not feed",
+          "winterNote": "Growth is minimal — nutrients won't be used"
+        },
+        "light": {
+          "ideal": "Low to moderate indirect light",
+          "placement": "Away from windows or in a north-facing room",
+          "placementNote": "One of the few plants that genuinely thrives in dark corners",
+          "avoid": "Direct sunlight",
+          "avoidNote": "Will scorch and bleach the leaves"
+        },
+        "environment": {
+          "temperature": "7–24°C (45–75°F)",
+          "temperatureNote": "Exceptionally cold-hardy — copes well with unheated rooms",
+          "humidity": "Low to moderate",
+          "humidityNote": "Tolerates dry air better than most houseplants"
+        }
+      },
+      "tips": [
+        "Earned its 'cast iron plant' nickname — it tolerates neglect, dust, drought, and low light better than almost anything",
+        "Growth is very slow — don't expect rapid changes and don't over-fertilise to compensate",
+        "Wipe leaves occasionally as they accumulate dust quickly in darker spots",
+        "Repot only when severely root bound — it actually prefers being slightly pot-bound"
+      ]
     }
   ]
 }

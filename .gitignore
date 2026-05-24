@@ -5,6 +5,12 @@ node_modules/
 .env
 .env.local
 .env*.local
+keys
+
+
+# Generated files
+care-response-*.json
+care-plan-*.json
 
 # Logs
 *.log

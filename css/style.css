@@ -1337,3 +1337,108 @@ nav a:hover { color: #1a1a1a; }
 .profile-select:focus { border-color: #2d6a4f; }
 
 .profile-select.just-saved { background: #dcfce7; }
+
+/* CARE PLAN BAR */
+.care-plan-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  background: #f0faf4;
+  border: 1px solid #c3e6d5;
+  border-radius: 12px;
+  padding: 1.1rem 1.4rem;
+  margin-bottom: 2rem;
+}
+
+.care-plan-bar-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+}
+
+.care-plan-bar-text strong {
+  font-size: 0.9rem;
+  color: #1a1a1a;
+}
+
+.care-plan-bar-text span {
+  font-size: 0.78rem;
+  color: #666;
+}
+
+.care-plan-btn {
+  flex-shrink: 0;
+  padding: 0.6rem 1.2rem;
+  background: #2d6a4f;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-family: inherit;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.care-plan-btn:hover:not(:disabled) { background: #1e4d38; }
+.care-plan-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+/* MINI CALENDAR LEGEND */
+.mini-cal-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1.25rem;
+  padding: 0.75rem 0.5rem 0.25rem;
+  border-top: 1px solid #f0f0ee;
+  margin-top: 0.25rem;
+}
+
+.mini-cal-legend-item {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  color: #666;
+}
+
+/* CARE SUMMARY */
+.care-summary-box {
+  background: #fff;
+  border: 1px solid #ebebeb;
+  border-left: 3px solid #2d6a4f;
+  border-radius: 10px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 2rem;
+}
+
+.care-summary-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #2d6a4f;
+  margin-bottom: 0.5rem;
+}
+
+.care-summary-text {
+  font-size: 0.875rem;
+  color: #444;
+  line-height: 1.6;
+}
+
+/* TOGGLE BUTTON */
+.toggle-btn {
+  font-family: inherit;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #999;
+  background: none;
+  border: 1px solid #e0e0e0;
+  border-radius: 6px;
+  padding: 0.25rem 0.75rem;
+  cursor: pointer;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.toggle-btn:hover { color: #555; border-color: #bbb; }

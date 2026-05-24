@@ -60,6 +60,7 @@ async function load(user) {
   }
 
   currentUserPlant = userPlant
+  currentPlantData = plant
   render(userPlant, plant, schedule || [])
   if (userPlant.lat && userPlant.lng) loadLocationName(userPlant.lat, userPlant.lng)
   if (userPlant.lat && userPlant.window_facing) calculateSunExposure(userPlant)
@@ -90,7 +91,11 @@ function render(up, plant, schedule) {
       </div>
     </div>
 
-    <div class="care-grid">
+    <div class="section-header" style="margin-bottom:1rem">
+      <h2>General care guide</h2>
+      <button class="toggle-btn" id="care-grid-toggle">Hide</button>
+    </div>
+    <div class="care-grid" id="care-grid">
       <div class="care-card">
         <div class="care-card-header"><div class="icon">💧</div><h2>Watering</h2></div>
         ${stat('Frequency', watering.frequency, watering.frequencyNote)}
@@ -116,12 +121,26 @@ function render(up, plant, schedule) {
       </div>
     </div>
 
-    <div class="section-header" style="margin-bottom:1rem">
-      <h2>Care this month</h2>
+    <div id="mini-cal-wrap">
+      <div class="section-header" style="margin-bottom:1rem"><h2>Care this month</h2></div>
+      ${renderMiniCalendar(schedule)}
     </div>
-    ${renderMiniCalendar(schedule)}
 
     ${renderProfile(up)}
+
+    <div class="care-plan-bar">
+      <div class="care-plan-bar-text">
+        <strong>Personalised care plan</strong>
+        <span>Generate a care schedule tailored to this plant's profile.</span>
+      </div>
+      <button class="care-plan-btn" id="care-plan-btn" data-id="${up.id}">Generate care plan</button>
+    </div>
+
+    ${up.care_summary ? `
+    <div class="care-summary-box" id="care-summary-box">
+      <div class="care-summary-label">Care insight</div>
+      <p class="care-summary-text">${up.care_summary}</p>
+    </div>` : `<div class="care-summary-box" id="care-summary-box" style="display:none"></div>`}
 
     <div class="tip-box">
       <h2>Care tips</h2>
@@ -192,7 +211,66 @@ function startEditing(span) {
   input.addEventListener('blur', () => finish(!escapePressed))
 }
 
-document.addEventListener('click', e => {
+document.addEventListener('click', async e => {
+  if (e.target.closest('#care-plan-btn')) {
+    const ctx = buildCarePlanContext()
+    if (!ctx) return
+    const { system, user } = buildPrompt(ctx)
+
+    const btn = document.getElementById('care-plan-btn')
+    btn.disabled = true
+    btn.textContent = 'Generating…'
+
+    try {
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      const { data, error } = await supabase.functions.invoke('generate-care-plan', {
+        body: {
+          system,
+          user,
+          user_plant_id: currentUserPlant.id,
+          user_id: authUser.id,
+        },
+      })
+      if (error) throw error
+
+      // Refresh mini calendar with new schedule
+      const { data: freshSchedule } = await supabase
+        .from('care_schedule').select('*').eq('user_plant_id', userPlantId)
+      const wrap = document.getElementById('mini-cal-wrap')
+      if (wrap) wrap.innerHTML = `
+        <div class="section-header" style="margin-bottom:1rem"><h2>Care this month</h2></div>
+        ${renderMiniCalendar(freshSchedule || [])}`
+
+      // Update summary
+      const summaryBox = document.getElementById('care-summary-box')
+      if (summaryBox && data.summary) {
+        summaryBox.style.display = ''
+        summaryBox.innerHTML = `
+          <div class="care-summary-label">Care insight</div>
+          <p class="care-summary-text">${data.summary}</p>`
+      }
+
+      btn.textContent = 'Care plan updated ✓'
+      setTimeout(() => { btn.textContent = 'Regenerate care plan' }, 3000)
+    } catch (err) {
+      console.error('Care plan error:', err)
+      btn.textContent = 'Something went wrong'
+      setTimeout(() => { btn.textContent = 'Generate care plan' }, 3000)
+    } finally {
+      btn.disabled = false
+    }
+    return
+  }
+
+  if (e.target.closest('#care-grid-toggle')) {
+    const grid = document.getElementById('care-grid')
+    const btn = document.getElementById('care-grid-toggle')
+    const hidden = grid.style.display === 'none'
+    grid.style.display = hidden ? '' : 'none'
+    btn.textContent = hidden ? 'Hide' : 'Show'
+    return
+  }
+
   if (e.target.closest('#profile-edit-btn')) {
     const card = document.querySelector('.profile-card')
     const btn = document.getElementById('profile-edit-btn')
@@ -225,9 +303,109 @@ document.addEventListener('change', async e => {
   if (field === 'window_facing' || field === 'light_obstruction') calculateSunExposure(currentUserPlant)
 })
 
+// --- Care plan context ---
+
+function getSeason(lat, date) {
+  const m = date.getMonth()
+  const n = ['Winter','Winter','Spring','Spring','Spring','Summer','Summer','Summer','Autumn','Autumn','Autumn','Winter']
+  const s = ['Summer','Summer','Autumn','Autumn','Autumn','Winter','Winter','Winter','Spring','Spring','Spring','Summer']
+  return lat >= 0 ? n[m] : s[m]
+}
+
+function buildCarePlanContext() {
+  const up = currentUserPlant
+  const plant = currentPlantData
+  if (!up || !plant) return null
+
+  const today = new Date()
+
+  const profileFields = {
+    nickname:            up.nickname,
+    room:                up.room,
+    location:            up.location,
+    soil_type:           up.soil_type,
+    age:                 up.age,
+    health:              up.health,
+    pot_size:            up.pot_size,
+    pot_material:        up.pot_material,
+    last_repotted:       up.last_repotted,
+    distance_to_window:  up.distance_to_window,
+    window_facing:       up.window_facing,
+    light_obstruction:   up.light_obstruction,
+  }
+
+  const profile = Object.fromEntries(
+    Object.entries(profileFields).filter(([, v]) => v != null && v !== '')
+  )
+
+  const context = { date: today.toISOString().split('T')[0] }
+  if (up.lat) context.season = getSeason(parseFloat(up.lat), today)
+  if (up.lat && up.lng) context.coordinates = { lat: up.lat, lng: up.lng }
+
+  return {
+    plant: { name: plant.name, species: plant.species },
+    profile,
+    context,
+  }
+}
+
+function buildPrompt(ctx) {
+  const { plant, profile, context } = ctx
+
+  const LABELS = {
+    nickname:           'Nickname',
+    room:               'Room',
+    location:           'Location in home',
+    soil_type:          'Soil type',
+    age:                'Plant age',
+    health:             'Current health',
+    pot_size:           'Pot size',
+    pot_material:       'Pot material',
+    last_repotted:      'Last repotted',
+    distance_to_window: 'Distance to window',
+    window_facing:      'Window facing',
+    light_obstruction:  'Light obstruction',
+  }
+
+  const profileLines = Object.entries(LABELS)
+    .filter(([key]) => profile[key] != null)
+    .map(([key, label]) => `- ${label}: ${profile[key]}`)
+    .join('\n')
+
+  const locationLine = context.coordinates
+    ? `Coordinates: ${context.coordinates.lat.toFixed(4)}, ${context.coordinates.lng.toFixed(4)}`
+    : ''
+
+  const system = `You are an expert horticulturist. Given specific details about a plant and its environment, generate a precise personalised care schedule using the create_care_schedule tool. You already know the general care requirements for any species — adjust your recommendations based on the specific conditions provided.`
+
+  const user = [
+    `Plant: ${plant.name} (${plant.species})`,
+    `Date: ${context.date}${context.season ? ` — ${context.season}` : ''}`,
+    locationLine,
+    '',
+    'Plant profile:',
+    profileLines || '- No profile data provided',
+    '',
+    'Create a care schedule tailored to these exact conditions.',
+  ].filter(l => l !== undefined).join('\n').trim()
+
+  return { system, user }
+}
+
+function downloadJSON(data, filename) {
+  const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' })
+  const url = URL.createObjectURL(blob)
+  const a = document.createElement('a')
+  a.href = url
+  a.download = filename
+  a.click()
+  URL.revokeObjectURL(url)
+}
+
 // --- Plant profile ---
 
 let currentUserPlant = null
+let currentPlantData = null
 
 const SOIL_TYPES = [
   'Standard potting mix',
@@ -449,6 +627,18 @@ function renderMiniCalendar(schedule) {
   ]
   while (cells.length % 7 !== 0) cells.push(null)
 
+  const careTypes = [...new Set(schedule.map(e => e.care_type))]
+  const CARE_LABELS = { water: 'Water', feed: 'Feed', mist: 'Mist', repot: 'Repot', prune: 'Prune' }
+
+  const legend = careTypes.length ? `
+    <div class="mini-cal-legend">
+      ${careTypes.map(t => `
+        <span class="mini-cal-legend-item">
+          <span>${CARE_ICONS[t] ?? '📋'}</span>
+          <span>${CARE_LABELS[t] ?? t}</span>
+        </span>`).join('')}
+    </div>` : ''
+
   return `
     <div class="mini-cal">
       <div class="mini-cal-grid">
@@ -464,6 +654,7 @@ function renderMiniCalendar(schedule) {
             </div>`
         }).join('')}
       </div>
+      ${legend}
     </div>`
 }
 

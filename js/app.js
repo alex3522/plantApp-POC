@@ -43,10 +43,10 @@ async function loadUserPlants(user) {
   if (!userPlants.length) {
     grid.innerHTML = `
       <div class="plants-empty">No plants yet — search for one to get started.</div>
-      <div class="plant-card add-card">
+      <a href="browse.html" class="plant-card add-card">
         <div class="add-icon">＋</div>
         <span>Add a plant</span>
-      </div>`
+      </a>`
     return
   }
 
@@ -66,10 +66,10 @@ async function loadUserPlants(user) {
   }).join('')
 
   grid.innerHTML = cards + `
-    <div class="plant-card add-card">
+    <a href="browse.html" class="plant-card add-card">
       <div class="add-icon">＋</div>
       <span>Add a plant</span>
-    </div>`
+    </a>`
 }
 
 async function loadUpcomingCare(user) {
@@ -144,8 +144,39 @@ document.addEventListener('click', async e => {
   }
 })
 
+const HERO_COPY = [
+  { from: 5,  to: 9,  h1: 'Early start.',               sub: 'Check what needs attention before the day gets away.' },
+  { from: 9,  to: 12, h1: 'Good morning.',               sub: 'A good time to water anything that\'s due today.' },
+  { from: 12, to: 14, h1: 'Afternoon check-in.',         sub: 'How are your plants looking today?' },
+  { from: 14, to: 17, h1: 'Good afternoon.',             sub: 'Bright light hours — a good time to check sun-loving plants.' },
+  { from: 17, to: 20, h1: 'Good evening.',               sub: 'Wind down with a quick look at tomorrow\'s care schedule.' },
+  { from: 20, to: 23, h1: 'Evening rounds.',             sub: 'Check for anything wilting before the night sets in.' },
+  { from: 23, to: 24, h1: 'Burning the midnight oil?',  sub: 'Your plants are resting. You should be too.' },
+  { from: 0,  to: 5,  h1: 'Late night plant keeping.',  sub: 'Quiet hours. Your plants are sleeping.' },
+]
+
+function updateHeroText(user) {
+  const heading = document.getElementById('hero-heading')
+  const sub = document.getElementById('hero-sub')
+  if (!heading || !sub) return
+
+  if (!user) {
+    heading.textContent = 'Your plants, looked after.'
+    sub.textContent = 'Search for a plant to get care guides, watering schedules, and feeding tips.'
+    return
+  }
+
+  const hour = new Date().getHours()
+  const copy = HERO_COPY.find(c => hour >= c.from && hour < c.to)
+  if (copy) {
+    heading.textContent = copy.h1
+    sub.textContent = copy.sub
+  }
+}
+
 initAuth(user => {
   currentUser = user
+  updateHeroText(user)
   const signedInContent = document.getElementById('signed-in-content')
   if (signedInContent) signedInContent.style.display = user ? '' : 'none'
   loadUserPlants(user)
