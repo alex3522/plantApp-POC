@@ -115,7 +115,7 @@ async function loadUpcomingCare(user) {
     const dateStr = new Date(task.next_due + 'T12:00:00').toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
 
     return `
-      <div class="task-item" data-type="${task.care_type}" data-id="${task.id}" data-frequency="${task.frequency_days}">
+      <div class="task-item" data-type="${task.care_type}" data-id="${task.id}" data-frequency="${task.frequency_days}" data-user-plant-id="${task.user_plant_id}">
         <div class="task-icon">${plantIcon}</div>
         <div class="task-info">
           <div class="task-name">${name}</div>
@@ -141,9 +141,17 @@ document.addEventListener('click', async e => {
   const nextDueStr = nextDue.toISOString().split('T')[0]
 
   btn.disabled = true
-  await supabase.from('care_schedule').update({ next_due: nextDueStr }).eq('id', id)
-
   const item = btn.closest('.task-item')
+  const { userPlantId, type: careType } = item.dataset
+
+  await Promise.all([
+    supabase.from('care_schedule').update({ next_due: nextDueStr }).eq('id', id),
+    currentUser && supabase.from('care_logs').insert({
+      user_plant_id: userPlantId,
+      user_id: currentUser.id,
+      care_type: careType,
+    })
+  ])
   item.classList.add('task-done')
   setTimeout(() => {
     item.remove()

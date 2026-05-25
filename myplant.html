@@ -20,9 +20,19 @@
     </div>
   </nav>
 
-  <div class="content">
+  <div class="content myplant-layout">
     <a href="index.html" class="back-link">← Back to my plants</a>
-    <div id="plant-page-content"></div>
+    <div class="myplant-body">
+      <aside class="myplant-toc" id="myplant-toc">
+        <a href="#section-care-guide" class="toc-link">Care guide</a>
+        <a href="#section-schedule" class="toc-link">Schedule</a>
+        <a href="#section-profile" class="toc-link">Profile</a>
+        <a href="#section-care-plan" class="toc-link">Care plan</a>
+        <a href="#section-tips" class="toc-link">Tips</a>
+        <a href="#section-history" class="toc-link toc-history" style="display:none">History</a>
+      </aside>
+      <div id="plant-page-content" class="myplant-main"></div>
+    </div>
   </div>
 
   <script type="module" src="js/myplant.js"></script>

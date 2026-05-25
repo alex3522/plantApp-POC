@@ -39,11 +39,13 @@ async function load(user) {
   const [
     { data: userPlant, error: upError },
     { plants },
-    { data: schedule }
+    { data: schedule },
+    { data: careHistory }
   ] = await Promise.all([
     supabase.from('user_plants').select('*').eq('id', userPlantId).single(),
     fetch('data/plants.json').then(r => r.json()),
-    supabase.from('care_schedule').select('*').eq('user_plant_id', userPlantId)
+    supabase.from('care_schedule').select('*').eq('user_plant_id', userPlantId),
+    supabase.from('care_logs').select('*').eq('user_plant_id', userPlantId).order('performed_at', { ascending: false }).limit(15)
   ])
 
   if (upError || !userPlant) {
@@ -61,12 +63,34 @@ async function load(user) {
 
   currentUserPlant = userPlant
   currentPlantData = plant
-  render(userPlant, plant, schedule || [])
+  render(userPlant, plant, schedule || [], careHistory || [])
   if (userPlant.lat && userPlant.lng) loadLocationName(userPlant.lat, userPlant.lng)
   if (userPlant.lat && userPlant.window_facing) calculateSunExposure(userPlant)
 }
 
-function render(up, plant, schedule) {
+function renderCareHistory(history) {
+  if (!history.length) return ''
+  const icons = { water: '💧', feed: '🌿', repot: '🪴', mist: '💦', prune: '✂️' }
+  const rows = history.map(log => {
+    const label = log.care_type.charAt(0).toUpperCase() + log.care_type.slice(1)
+    const date = new Date(log.performed_at)
+    const dateStr = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' })
+    const timeStr = date.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' })
+    return `
+      <div class="care-log-item">
+        <div class="care-log-icon">${icons[log.care_type] ?? '🪴'}</div>
+        <div class="care-log-info">
+          <span class="care-log-type">${label}</span>
+          <span class="care-log-date">${dateStr} · ${timeStr}</span>
+        </div>
+      </div>`
+  }).join('')
+  return `
+    <div class="section-header" style="margin-bottom:1rem"><h2>Care history</h2></div>
+    <div class="care-history">${rows}</div>`
+}
+
+function render(up, plant, schedule, history = []) {
   const displayName = up.nickname || plant.name
   document.title = `${displayName} — plantApp`
 
@@ -91,61 +115,122 @@ function render(up, plant, schedule) {
       </div>
     </div>
 
-    <div class="section-header" style="margin-bottom:1rem">
-      <h2>General care guide</h2>
-      <button class="toggle-btn" id="care-grid-toggle">Hide</button>
-    </div>
-    <div class="care-grid" id="care-grid">
-      <div class="care-card">
-        <div class="care-card-header"><div class="icon">💧</div><h2>Watering</h2></div>
-        ${stat('Frequency', watering.frequency, watering.frequencyNote)}
-        ${stat('Amount', watering.amount)}
-        ${stat('Seasonal adjustment', watering.seasonal, watering.seasonalNote)}
+    <div id="section-care-guide">
+      <div class="section-header" style="margin-bottom:1rem">
+        <h2>General care guide</h2>
+        <button class="toggle-btn" id="care-grid-toggle">Hide</button>
       </div>
-      <div class="care-card">
-        <div class="care-card-header"><div class="icon">🌿</div><h2>Feeding</h2></div>
-        ${stat('Frequency', feeding.frequency, feeding.frequencyNote)}
-        ${stat('Fertiliser', feeding.fertiliser)}
-        ${stat('Winter', feeding.winter, feeding.winterNote)}
+      <div class="care-grid" id="care-grid">
+        <div class="care-card">
+          <div class="care-card-header"><div class="icon">💧</div><h2>Watering</h2></div>
+          ${stat('Frequency', watering.frequency, watering.frequencyNote)}
+          ${stat('Amount', watering.amount)}
+          ${stat('Seasonal adjustment', watering.seasonal, watering.seasonalNote)}
+        </div>
+        <div class="care-card">
+          <div class="care-card-header"><div class="icon">🌿</div><h2>Feeding</h2></div>
+          ${stat('Frequency', feeding.frequency, feeding.frequencyNote)}
+          ${stat('Fertiliser', feeding.fertiliser)}
+          ${stat('Winter', feeding.winter, feeding.winterNote)}
+        </div>
+        <div class="care-card">
+          <div class="care-card-header"><div class="icon">☀️</div><h2>Light</h2></div>
+          ${stat('Ideal', light.ideal)}
+          ${stat('Placement', light.placement, light.placementNote)}
+          ${stat('Avoid', light.avoid, light.avoidNote)}
+        </div>
+        <div class="care-card">
+          <div class="care-card-header"><div class="icon">🌡️</div><h2>Temperature & Humidity</h2></div>
+          ${stat('Temperature', environment.temperature, environment.temperatureNote)}
+          ${stat('Humidity', environment.humidity, environment.humidityNote)}
+        </div>
       </div>
-      <div class="care-card">
-        <div class="care-card-header"><div class="icon">☀️</div><h2>Light</h2></div>
-        ${stat('Ideal', light.ideal)}
-        ${stat('Placement', light.placement, light.placementNote)}
-        ${stat('Avoid', light.avoid, light.avoidNote)}
-      </div>
-      <div class="care-card">
-        <div class="care-card-header"><div class="icon">🌡️</div><h2>Temperature & Humidity</h2></div>
-        ${stat('Temperature', environment.temperature, environment.temperatureNote)}
-        ${stat('Humidity', environment.humidity, environment.humidityNote)}
-      </div>
-    </div>
-
-    <div id="mini-cal-wrap">
-      <div class="section-header" style="margin-bottom:1rem"><h2>Care this month</h2></div>
-      ${renderMiniCalendar(schedule)}
     </div>
 
-    ${renderProfile(up)}
-
-    <div class="care-plan-bar">
-      <div class="care-plan-bar-text">
-        <strong>Personalised care plan<span class="tooltip-icon" data-tooltip="Sends this plant's profile to an AI that generates a watering, feeding, and misting schedule specific to its conditions. Updates once per 24 hours.">?</span></strong>
-        <span>Generate a care schedule tailored to this plant's profile.</span>
+    <div id="section-schedule">
+      <div id="mini-cal-wrap">
+        <div class="section-header" style="margin-bottom:1rem"><h2>Care this month</h2></div>
+        ${renderMiniCalendar(schedule)}
       </div>
-      ${carePlanBtn(up)}
     </div>
 
-    ${up.care_summary ? `
-    <div class="care-summary-box" id="care-summary-box">
-      <div class="care-summary-label">Care insight</div>
-      <p class="care-summary-text">${up.care_summary}</p>
-    </div>` : `<div class="care-summary-box" id="care-summary-box" style="display:none"></div>`}
+    <div id="section-profile">
+      ${renderProfile(up)}
+    </div>
 
-    <div class="tip-box">
-      <h2>Care tips</h2>
-      <ul>${plant.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+    <div id="section-care-plan">
+      <div class="care-plan-bar">
+        <div class="care-plan-bar-text">
+          <strong>Personalised care plan<span class="tooltip-icon" data-tooltip="Sends this plant's profile to an AI that generates a watering, feeding, and misting schedule specific to its conditions. Updates once per 24 hours.">?</span></strong>
+          <span>Generate a care schedule tailored to this plant's profile.</span>
+        </div>
+        ${carePlanBtn(up)}
+      </div>
+      ${up.care_summary ? `
+      <div class="care-summary-box" id="care-summary-box">
+        <div class="care-summary-label">Care insight</div>
+        <p class="care-summary-text">${up.care_summary}</p>
+      </div>` : `<div class="care-summary-box" id="care-summary-box" style="display:none"></div>`}
+    </div>
+
+    <div id="section-tips">
+      <div class="tip-box">
+        <h2>Care tips</h2>
+        <ul>${plant.tips.map(t => `<li>${t}</li>`).join('')}</ul>
+      </div>
+    </div>
+
+    <div id="section-history">
+      ${renderCareHistory(history)}
     </div>`
+
+  initToc(history.length > 0)
+}
+
+// --- TOC ---
+
+function initToc(hasHistory) {
+  if (hasHistory) {
+    const historyLink = document.querySelector('.toc-history')
+    if (historyLink) historyLink.style.display = ''
+  }
+
+  const links = document.querySelectorAll('.toc-link')
+  const sectionIds = ['section-care-guide', 'section-schedule', 'section-profile', 'section-care-plan', 'section-tips', 'section-history']
+  const sections = sectionIds.map(id => document.getElementById(id)).filter(Boolean)
+
+  const setActive = id => {
+    links.forEach(l => l.classList.toggle('toc-active', l.getAttribute('href') === `#${id}`))
+  }
+
+  const onScroll = () => {
+    const atBottom = window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 40
+
+    if (atBottom) {
+      setActive(sections[sections.length - 1].id)
+      return
+    }
+
+    const threshold = window.innerHeight / 3
+    let current = sections[0].id
+    sections.forEach(section => {
+      if (section.getBoundingClientRect().top < threshold) current = section.id
+    })
+    setActive(current)
+  }
+
+  window.addEventListener('scroll', onScroll, { passive: true })
+  onScroll()
+
+  links.forEach(link => {
+    link.addEventListener('click', e => {
+      e.preventDefault()
+      const target = document.querySelector(link.getAttribute('href'))
+      if (!target) return
+      const offset = 80
+      window.scrollTo({ top: target.getBoundingClientRect().top + window.scrollY - offset, behavior: 'smooth' })
+    })
+  })
 }
 
 // --- Inline editing ---
