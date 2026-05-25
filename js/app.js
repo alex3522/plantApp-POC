@@ -211,6 +211,31 @@ function updateHeroText(user) {
   }
 }
 
+async function loadPopularPlants() {
+  const grid = document.getElementById('popular-grid')
+  if (!grid) return
+
+  const [{ data }, plantData] = await Promise.all([
+    supabase.rpc('get_popular_plants', { limit_count: 5 }),
+    getPlantData()
+  ])
+
+  if (!data?.length) return
+
+  const cards = data
+    .map(({ plant_id }) => plantData[plant_id])
+    .filter(Boolean)
+    .map(p => `<a href="plant.html?id=${p.id}" class="popular-card">
+      <div class="icon">${p.icon}</div>
+      <div class="name">${p.name}</div>
+    </a>`)
+    .join('')
+
+  if (cards) grid.innerHTML = cards
+}
+
+loadPopularPlants()
+
 initAuth(user => {
   currentUser = user
   updateHeroText(user)
