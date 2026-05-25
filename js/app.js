@@ -42,7 +42,14 @@ async function loadUserPlants(user) {
 
   if (!userPlants.length) {
     grid.innerHTML = `
-      <div class="plants-empty">No plants yet — search for one to get started.</div>
+      <div class="plants-empty">
+        <p class="plants-empty-title">No plants yet — here's how to get started:</p>
+        <ol class="plants-empty-steps">
+          <li>Search for a plant above or <a href="browse.html">browse the library</a></li>
+          <li>Add it to your collection</li>
+          <li>Open its page, fill in the profile, and generate a personalised care plan</li>
+        </ol>
+      </div>
       <a href="browse.html" class="plant-card add-card">
         <div class="add-icon">＋</div>
         <span>Add a plant</span>
@@ -209,6 +216,8 @@ initAuth(user => {
   updateHeroText(user)
   const signedInContent = document.getElementById('signed-in-content')
   if (signedInContent) signedInContent.style.display = user ? '' : 'none'
+  const howItWorks = document.getElementById('how-it-works')
+  if (howItWorks) howItWorks.style.display = user ? 'none' : ''
   loadUserPlants(user)
   loadUpcomingCare(user)
 })

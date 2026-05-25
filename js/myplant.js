@@ -130,7 +130,7 @@ function render(up, plant, schedule) {
 
     <div class="care-plan-bar">
       <div class="care-plan-bar-text">
-        <strong>Personalised care plan</strong>
+        <strong>Personalised care plan<span class="tooltip-icon" data-tooltip="Sends this plant's profile to an AI that generates a watering, feeding, and misting schedule specific to its conditions. Updates once per 24 hours.">?</span></strong>
         <span>Generate a care schedule tailored to this plant's profile.</span>
       </div>
       ${carePlanBtn(up)}
@@ -468,10 +468,13 @@ function profileSelect(field, id, options, current, placeholder, extraClass = ''
   </select>`
 }
 
-function profileRow(label, viewVal, editInput) {
+function profileRow(label, viewVal, editInput, tooltip = '') {
+  const labelHtml = tooltip
+    ? `${label}<span class="tooltip-icon" data-tooltip="${tooltip}">?</span>`
+    : label
   return `
     <div class="profile-row">
-      <span class="profile-label">${label}</span>
+      <span class="profile-label">${labelHtml}</span>
       <div class="profile-value-wrap">
         <span class="view-val">${viewVal}</span>
         ${editInput}
@@ -488,24 +491,24 @@ function renderProfile(up) {
     </div>
     <div class="profile-card">
       <div class="profile-row">
-        <span class="profile-label">Location</span>
+        <span class="profile-label">Location<span class="tooltip-icon" data-tooltip="Used to calculate local sunlight hours using weather data">?</span></span>
         <div class="profile-value-wrap">
           <span class="location-display" id="location-display">${hasLocation ? '📍 Loading…' : '—'}</span>
           <button class="edit-input location-btn" id="location-btn" data-id="${up.id}">${hasLocation ? 'Update location' : '📍 Use my location'}</button>
         </div>
       </div>
-      ${profileRow('Soil type',   up.soil_type    || '—', profileSelect('soil_type',        up.id, SOIL_TYPES,            up.soil_type,        'Select soil type…'))}
-      ${profileRow('Age',         up.age          || '—', profileSelect('age',               up.id, AGE_OPTIONS,           up.age,              'Select age…'))}
-      ${profileRow('Health',      up.health       || '—', profileSelect('health',            up.id, HEALTH_OPTIONS,        up.health,           'Select health…'))}
-      ${profileRow('Pot size',    up.pot_size     || '—', profileSelect('pot_size',          up.id, POT_SIZES,             up.pot_size,         'Select pot size…'))}
-      ${profileRow('Pot material',up.pot_material || '—', profileSelect('pot_material',      up.id, POT_MATERIALS,         up.pot_material,     'Select material…'))}
+      ${profileRow('Soil type',   up.soil_type    || '—', profileSelect('soil_type',        up.id, SOIL_TYPES,            up.soil_type,        'Select soil type…'), 'The growing medium the plant is in — affects drainage and nutrient retention')}
+      ${profileRow('Age',         up.age          || '—', profileSelect('age',               up.id, AGE_OPTIONS,           up.age,              'Select age…'), 'Approximate age of the plant — older plants may need less frequent repotting')}
+      ${profileRow('Health',      up.health       || '—', profileSelect('health',            up.id, HEALTH_OPTIONS,        up.health,           'Select health…'), 'Current condition of the plant — used to adjust care intensity')}
+      ${profileRow('Pot size',    up.pot_size     || '—', profileSelect('pot_size',          up.id, POT_SIZES,             up.pot_size,         'Select pot size…'), 'Larger pots hold more moisture and dry out more slowly')}
+      ${profileRow('Pot material',up.pot_material || '—', profileSelect('pot_material',      up.id, POT_MATERIALS,         up.pot_material,     'Select material…'), 'Terracotta dries out faster than plastic or ceramic — affects watering frequency')}
       ${profileRow('Last repotted', formatMonth(up.last_repotted),
-        `<input class="edit-input profile-month-input" type="month" data-field="last_repotted" data-id="${up.id}" value="${up.last_repotted ? up.last_repotted.slice(0, 7) : ''}" />`)}
-      ${profileRow('Distance to window', up.distance_to_window || '—', profileSelect('distance_to_window', up.id, DISTANCE_TO_WINDOW_OPTIONS, up.distance_to_window, 'Select distance…'))}
-      ${profileRow('Window faces',up.window_facing     || '—', profileSelect('window_facing',     up.id, WINDOW_FACING_OPTIONS,  up.window_facing,    'Select direction…'))}
-      ${profileRow('Obstruction', up.light_obstruction || '—', profileSelect('light_obstruction', up.id, OBSTRUCTION_OPTIONS,    up.light_obstruction,'Select obstruction…'))}
+        `<input class="edit-input profile-month-input" type="month" data-field="last_repotted" data-id="${up.id}" value="${up.last_repotted ? up.last_repotted.slice(0, 7) : ''}" />`, 'Helps determine whether the plant is due for a new pot')}
+      ${profileRow('Distance to window', up.distance_to_window || '—', profileSelect('distance_to_window', up.id, DISTANCE_TO_WINDOW_OPTIONS, up.distance_to_window, 'Select distance…'), 'Light intensity roughly halves for every metre from a window')}
+      ${profileRow('Window faces',up.window_facing     || '—', profileSelect('window_facing',     up.id, WINDOW_FACING_OPTIONS,  up.window_facing,    'Select direction…'), 'South-facing gets the most sun; north-facing the least. Used to estimate daily light')}
+      ${profileRow('Obstruction', up.light_obstruction || '—', profileSelect('light_obstruction', up.id, OBSTRUCTION_OPTIONS,    up.light_obstruction,'Select obstruction…'), 'Buildings, trees, or overhangs outside the window that reduce incoming light')}
       <div class="profile-row" id="sun-row" style="${hasLocation && up.window_facing ? '' : 'display:none'}">
-        <span class="profile-label">Est. sunlight</span>
+        <span class="profile-label">Est. sunlight<span class="tooltip-icon" data-tooltip="Calculated from your location, window direction, and obstructions using local weather data">?</span></span>
         <div class="profile-value-wrap">
           <span class="sun-display" id="sun-display">Calculating…</span>
         </div>
