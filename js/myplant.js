@@ -133,7 +133,7 @@ function render(up, plant, schedule) {
         <strong>Personalised care plan</strong>
         <span>Generate a care schedule tailored to this plant's profile.</span>
       </div>
-      <button class="care-plan-btn" id="care-plan-btn" data-id="${up.id}">Generate care plan</button>
+      ${carePlanBtn(up)}
     </div>
 
     ${up.care_summary ? `
@@ -231,7 +231,15 @@ document.addEventListener('click', async e => {
           user_id: authUser.id,
         },
       })
-      if (error) throw error
+      if (error) {
+        const msg = data?.error || error.message || ''
+        if (msg.includes('Try again in')) {
+          btn.textContent = msg
+          btn.disabled = true
+          return
+        }
+        throw error
+      }
 
       // Refresh mini calendar with new schedule
       const { data: freshSchedule } = await supabase
@@ -602,6 +610,21 @@ function getOccurrencesInMonth(nextDue, frequencyDays, year, month) {
     current = new Date(current.getTime() + frequencyDays * 86400000)
   }
   return days
+}
+
+function carePlanBtn(up) {
+  if (up.care_plan_generated_at) {
+    const hoursSince = (Date.now() - new Date(up.care_plan_generated_at).getTime()) / 3600000
+    if (hoursSince < 24) {
+      const hoursLeft = Math.ceil(24 - hoursSince)
+      return `<button class="care-plan-btn" id="care-plan-btn" data-id="${up.id}" disabled>
+        Available in ${hoursLeft}h
+      </button>`
+    }
+  }
+  return `<button class="care-plan-btn" id="care-plan-btn" data-id="${up.id}">
+    ${up.care_plan_generated_at ? 'Regenerate care plan' : 'Generate care plan'}
+  </button>`
 }
 
 function renderMiniCalendar(schedule) {

@@ -49,6 +49,30 @@ Deno.serve(async (req) => {
   try {
     const { system, user, user_plant_id, user_id } = await req.json()
 
+    // Check 24-hour cooldown
+    const supabase = createClient(
+      Deno.env.get('SUPABASE_URL')!,
+      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
+    )
+
+    const { data: plantRow } = await supabase
+      .from('user_plants')
+      .select('care_plan_generated_at')
+      .eq('id', user_plant_id)
+      .single()
+
+    if (plantRow?.care_plan_generated_at) {
+      const lastGenerated = new Date(plantRow.care_plan_generated_at)
+      const hoursSince = (Date.now() - lastGenerated.getTime()) / 3600000
+      if (hoursSince < 24) {
+        const hoursLeft = Math.ceil(24 - hoursSince)
+        return new Response(
+          JSON.stringify({ error: `Care plan was recently generated. Try again in ${hoursLeft} hour${hoursLeft === 1 ? '' : 's'}.` }),
+          { status: 429, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
+      }
+    }
+
     // Call Claude with forced tool use
     const anthropicRes = await fetch('https://api.anthropic.com/v1/messages', {
       method: 'POST',
@@ -77,11 +101,6 @@ Deno.serve(async (req) => {
     const { tasks, summary } = toolCall.input
 
     // Write to Supabase
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL')!,
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
-    )
-
     await supabase.from('care_schedule').delete().eq('user_plant_id', user_plant_id)
 
     const { error: insertError } = await supabase.from('care_schedule').insert(
@@ -96,7 +115,10 @@ Deno.serve(async (req) => {
 
     if (insertError) throw new Error(insertError.message)
 
-    await supabase.from('user_plants').update({ care_summary: summary }).eq('id', user_plant_id)
+    await supabase.from('user_plants').update({
+      care_summary: summary,
+      care_plan_generated_at: new Date().toISOString(),
+    }).eq('id', user_plant_id)
 
     return new Response(JSON.stringify({ tasks, summary }), {
       headers: { ...corsHeaders, 'Content-Type': 'application/json' },
