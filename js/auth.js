@@ -101,13 +101,17 @@ function injectModal() {
     btn.disabled = true
     errorEl.textContent = ''
 
-    const { error } = await supabase.auth.signUp({ email, password })
+    const { data, error } = await supabase.auth.signUp({ email, password })
 
     btn.disabled = false
     if (error) { errorEl.textContent = error.message; return }
 
-    errorEl.style.color = '#2d6a4f'
-    errorEl.textContent = 'Check your email to confirm your account.'
+    if (data.session) {
+      closeModal()
+    } else {
+      errorEl.style.color = '#2d6a4f'
+      errorEl.textContent = 'Check your email to confirm your account.'
+    }
   })
 }
 
